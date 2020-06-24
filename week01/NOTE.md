@@ -5,4 +5,5 @@
 4. lxml  库 xPath
 5. 防止反抓取: 使用 user_agent (随机选取)，降低抓取频率，代理 ip
 6. pandas 库 生成 cvs
-7. 
+7. Scrapy 爬虫框架  https://scrapy-chs.readthedocs.io/zh_CN/0.24/intro/install.html
+8. 执行 scrapy crawl maoyanfilms
