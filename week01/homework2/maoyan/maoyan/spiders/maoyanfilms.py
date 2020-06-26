@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from bs4 import BeautifulSoup as bs
+from scrapy import Selector
 
 from maoyan.items import MaoyanItem
 
@@ -22,19 +22,27 @@ class MaoyanfilmsSpider(scrapy.Spider):
 
     # 解析函数
     def parse(self, response):
-        soup = bs(response.text, 'html.parser')
+        div_tags = Selector(response=response).xpath(
+            '//div[@class="movie-hover-info"]')
+        index = 0
 
-        divstag = soup.find_all(
-            'div', attrs={'class': 'movie-item-hover'}, limit=10)
+        for div_tag in div_tags:
 
-        for divtag in divstag:
+            if index >= 10:
+                break
+
+            index += 1
+
             item = MaoyanItem()
-            item['fname'] = divtag.find('span', attrs={'class': 'name'}).text
+            fname = div_tag.xpath(
+                './/div[@class="movie-hover-title"][1]/span[1]/text()')
+            ftype = div_tag.xpath(
+                './/div[@class="movie-hover-title"][2]/text()')
+            fdate = div_tag.xpath(
+                './/div[@class="movie-hover-title movie-hover-brief"]/text()')
 
-            for span in divtag.find_all('span', attrs={'class': 'hover-tag'}):
-                txt = span.text
-                if txt == '类型:':
-                    item['ftype'] = span.next_sibling
-                if txt == '上映时间:':
-                    item['fdate'] = span.next_sibling
+            item['fname'] = fname.extract()[0]
+            item['ftype'] = ftype.extract()[1]
+            item['fdate'] = fdate.extract()[1]
+
             yield item

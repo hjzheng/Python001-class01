@@ -16,11 +16,11 @@ class MaoyanPipeline:
         ftype = item['ftype']
         fdate = item['fdate']
 
-        output = f'|{fname.strip()}|\t|{ftype.strip()}|\t|{fdate.strip()}|\n\n'
+        output = f'{fname.strip()},{ftype.strip()},{fdate.strip()}\n'
 
         print(output)
 
-        with open('./maoyanfilm.txt', 'a+', encoding='utf-8') as article:
+        with open('./maoyanfilm.csv', 'a+', encoding='utf-8') as article:
             article.write(output)
             article.close()
 
