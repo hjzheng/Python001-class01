@@ -16,7 +16,7 @@ class MaoyanPipeline:
         ftype = item['ftype']
         fdate = item['fdate']
 
-        output = f'|{fname}|\t|{ftype}|\t|{fdate}|\n\n'
+        output = f'|{fname.strip()}|\t|{ftype.strip()}|\t|{fdate.strip()}|\n\n'
 
         print(output)
 
