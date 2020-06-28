@@ -7,3 +7,4 @@
 6. pandas 库 生成 cvs
 7. Scrapy 爬虫框架  https://scrapy-chs.readthedocs.io/zh_CN/0.24/intro/install.html
 8. 执行 scrapy crawl maoyanfilms
+9. yeild 和 列表推导式
