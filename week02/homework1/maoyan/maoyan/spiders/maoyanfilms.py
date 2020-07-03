@@ -8,7 +8,7 @@ from maoyan.items import MaoyanItem
 class MaoyanfilmsSpider(scrapy.Spider):
     name = 'maoyanfilms'
     allowed_domains = ['maoyan.com']
-    start_urls = ['http://maoyan.com/']
+    start_urls = ['https://maoyan.com/']
 
     # def parse(self, response):
     #     pass

@@ -30,6 +30,15 @@ USER_AGENT = random.choice(USER_AGENT_LIST)
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'maoyan (+http://www.yourdomain.com)'
 
+# curl "http://pubproxy.com/api/proxy?limit=10&format=txt&https=true&type=http"
+# https://github.com/clarketm/proxy-list
+
+HTTP_PROXY_LIST = [
+    "https://80.191.174.220:8080",
+    "https://79.111.13.155:50625",
+    "https://51.254.35.77:3128",
+]
+
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
@@ -64,9 +73,12 @@ DOWNLOAD_DELAY = 3
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'maoyan.middlewares.MaoyanDownloaderMiddleware': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+    'maoyan.middlewares.MaoyanDownloaderMiddleware': 543,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'maoyan.middlewares.RandomHttpProxyMiddleware': 400,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
