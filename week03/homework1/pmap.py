@@ -1,6 +1,7 @@
 import argparse
 import os
-from multiprocessing.pool import Pool
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 import subprocess
 import socket
 
@@ -75,36 +76,36 @@ def runTelnet(ip, port):
 
 
 if __name__ == "__main__":
-    p = Pool(args.n)
+    p = None
+    if args.m == 'thread':
+        p = ThreadPoolExecutor(max_workers=args.n)
+    else:
+        p = ProcessPoolExecutor(max_workers=args.n)
+
     if args.f == 'ping':
         results = []
-        for ip in ips:
-            results.append(p.apply_async(runPing, args=(ip,)))
-        p.close()
-        p.join()
-        for res in results:
-            if args.w:
-                with open(args.w, 'a+', encoding='utf-8') as article:
-                    article.write(f'{res.get()} \n')
-                    article.close()
-            else:
-                print(res.get())
-        p.terminate()
+        with p as executor:
+            for ip in ips:
+                results.append(executor.submit(runPing, ip))
+            for res in results:
+                if args.w:
+                    with open(args.w, 'a+', encoding='utf-8') as article:
+                        article.write(f'{res.result()} \n')
+                        article.close()
+                else:
+                    print(res.result())
     else:
         results = []
-        for ip in ips:
-            for port in range(65535):
-                results.append(p.apply_async(runTelnet, args=(ip, port)))
-        p.close()
-        p.join()
-        for res in results:
-            if args.w:
-                with open(args.w, 'a+', encoding='utf-8') as article:
-                    article.write(f'{res.get()} \n')
-                    article.close()
-            else:
-                print(res.get())
-        p.terminate()
-
+        with p as executor:
+            for ip in ips:
+                for port in range(65535):
+                    results.append(executor.submit(runTelnet, ip, port))
+            for res in results:
+                if args.w:
+                    with open(args.w, 'a+', encoding='utf-8') as article:
+                        article.write(f'{res.result()} \n')
+                        article.close()
+                else:
+                    print(res.result())
 # python3 pmap.py -n 100 -f ping -ip 192.168.10.100-192.168.10.200 -w pingRes.txt
 # python3 pmap.py -n 10000 -f tcp -ip 192.168.10.157 -w tcpRes.txt

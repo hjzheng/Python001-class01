@@ -48,4 +48,8 @@ https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#exchanging-object
   - 线程和进程的区别
   - 
 
-6. 线程池
+6. 线程池  p12
+
+7. concurrent.futures p13
+concurrent.futures - 线程池执行器：https://docs.python.org/zh-cn/3.7/library/concurrent.futures.html#threadpoolexecutor
+concurrent.futures - 进程池执行器：https://docs.python.org/zh-cn/3.7/library/concurrent.futures.html#processpoolexecutor
